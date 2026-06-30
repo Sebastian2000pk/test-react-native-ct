@@ -1,4 +1,5 @@
 import { Image } from "expo-image";
+import { router } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { Job } from "@/interfaces/job";
@@ -9,7 +10,7 @@ export const JobCard = ({ job }: { job: Job }) => {
   const fav = useFavoritesStore((s) => s.favorites.some((j) => j.id === job.id));
 
   return (
-    <View style={styles.card}>
+    <Pressable style={styles.card} onPress={() => router.push(`/job/${job.id}`)}>
       <Image
         source={{ uri: job.company_logo }}
         style={styles.logo}
@@ -30,7 +31,7 @@ export const JobCard = ({ job }: { job: Job }) => {
           {fav ? "♥" : "♡"}
         </Text>
       </Pressable>
-    </View>
+    </Pressable>
   );
 };
 
