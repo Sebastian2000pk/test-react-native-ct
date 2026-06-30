@@ -3,9 +3,8 @@ import { FlatList, Text, View } from "react-native";
 import { useJobsStore } from "../stores/useJobsStore";
 
 export const JobsScreen = () => {
-  const { status, error, loadJobs, loadCategories, filteredJobs } =
-    useJobsStore();
-  const data = filteredJobs();
+  const { status, error, loadJobs, loadCategories, jobs } = useJobsStore();
+  const data = jobs;
 
   useEffect(() => {
     loadJobs();
