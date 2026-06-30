@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { FlatList, RefreshControl, Text, View } from "react-native";
+import { FlatList, RefreshControl, StyleSheet, Text } from "react-native";
+import { JobCard } from "../components/JobCard";
 import { StateView } from "../components/StateView";
 import { useJobsStore } from "../stores/useJobsStore";
 
@@ -21,17 +22,10 @@ export const JobsScreen = () => {
     <>
       <Text>Jobs Screen</Text>
       <FlatList
+        style={styles.list}
         data={data}
         keyExtractor={(item) => String(item.id)}
-        renderItem={({ item }) => (
-          <View
-            style={{ padding: 10, borderBottomWidth: 1, borderColor: "#ccc" }}
-          >
-            <Text style={{ fontWeight: "bold" }}>{item.title}</Text>
-            <Text>{item.company_name}</Text>
-            <Text>{item.category}</Text>
-          </View>
-        )}
+        renderItem={({ item }) => <JobCard job={item} />}
         refreshControl={
           <RefreshControl
             refreshing={status === "loading"}
@@ -43,3 +37,10 @@ export const JobsScreen = () => {
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  list: {
+    flex: 1,
+    width: "100%",
+  },
+});
