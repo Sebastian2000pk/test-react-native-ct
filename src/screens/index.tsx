@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { FlatList, Text, View } from "react-native";
+import { FlatList, RefreshControl, Text, View } from "react-native";
 import { StateView } from "../components/StateView";
 import { useJobsStore } from "../stores/useJobsStore";
 
@@ -32,6 +32,12 @@ export const JobsScreen = () => {
             <Text>{item.category}</Text>
           </View>
         )}
+        refreshControl={
+          <RefreshControl
+            refreshing={status === "loading"}
+            onRefresh={loadJobs}
+          />
+        }
       />
     </>
   );
