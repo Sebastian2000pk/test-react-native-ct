@@ -17,10 +17,9 @@ interface JobsState {
   setSearch: (s: string) => void;
   setCategory: (c: string) => void;
   setJobType: (t: string) => void;
-  filteredJobs: () => Job[];
 }
 
-export const useJobsStore = create<JobsState>((set, get) => ({
+export const useJobsStore = create<JobsState>((set) => ({
   jobs: [],
   categories: [],
   status: "idle",
@@ -32,10 +31,8 @@ export const useJobsStore = create<JobsState>((set, get) => ({
   loadJobs: async () => {
     set({ status: "loading", error: null });
     try {
-      const jobs = await fetchJobs({
-        category: get().category || undefined,
-        limit: 100,
-      });
+      const jobs = await fetchJobs({ limit: 100 });
+      console.log("Fetched jobs:", jobs); // Debugging line
       set({ jobs, status: "success" });
     } catch (e: any) {
       set({ status: "error", error: e.message });
@@ -50,22 +47,6 @@ export const useJobsStore = create<JobsState>((set, get) => ({
   },
 
   setSearch: (search) => set({ search }),
-  setCategory: (category) => {
-    set({ category });
-    get().loadJobs();
-  },
+  setCategory: (category) => set({ category }),
   setJobType: (jobType) => set({ jobType }),
-
-  filteredJobs: () => {
-    const { jobs, search, jobType } = get();
-    const q = search.trim().toLowerCase();
-    return jobs.filter((j) => {
-      const matchText =
-        !q ||
-        j.title.toLowerCase().includes(q) ||
-        j.company_name.toLowerCase().includes(q);
-      const matchType = !jobType || j.job_type === jobType;
-      return matchText && matchType;
-    });
-  },
 }));

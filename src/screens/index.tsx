@@ -1,12 +1,26 @@
-import { useEffect } from "react";
-import { FlatList, RefreshControl, StyleSheet, Text } from "react-native";
+import { useEffect, useMemo } from "react";
+import { FlatList, RefreshControl, StyleSheet } from "react-native";
 import { JobCard } from "../components/JobCard";
+import { JobFilters } from "../components/JobFilters";
 import { StateView } from "../components/StateView";
 import { useJobsStore } from "../stores/useJobsStore";
 
 export const JobsScreen = () => {
-  const { status, error, loadJobs, loadCategories, jobs } = useJobsStore();
-  const data = jobs;
+  const { status, error, jobs, search, category, jobType, loadJobs, loadCategories } =
+    useJobsStore();
+
+  const data = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return jobs.filter((j) => {
+      const matchText =
+        !q ||
+        j.title.toLowerCase().includes(q) ||
+        j.company_name.toLowerCase().includes(q);
+      const matchCategory = !category || j.category === category;
+      const matchType = !jobType || j.job_type === jobType;
+      return matchText && matchCategory && matchType;
+    });
+  }, [jobs, search, category, jobType]);
 
   useEffect(() => {
     loadJobs();
@@ -20,7 +34,7 @@ export const JobsScreen = () => {
 
   return (
     <>
-      <Text>Jobs Screen</Text>
+      <JobFilters />
       <FlatList
         style={styles.list}
         data={data}
