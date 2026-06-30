@@ -38,6 +38,7 @@ export const JobsScreen = () => {
             onRefresh={loadJobs}
           />
         }
+        ListEmptyComponent={<StateView status="empty" empty="No hay empleos" />}
       />
     </>
   );
