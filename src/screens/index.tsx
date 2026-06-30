@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { FlatList, Text, View } from "react-native";
+import { StateView } from "../components/StateView";
 import { useJobsStore } from "../stores/useJobsStore";
 
 export const JobsScreen = () => {
@@ -10,6 +11,11 @@ export const JobsScreen = () => {
     loadJobs();
     loadCategories();
   }, []);
+
+  if (status === "loading" && data.length === 0)
+    return <StateView status="loading" />;
+  if (status === "error")
+    return <StateView status="error" error={error} onRetry={loadJobs} />;
 
   return (
     <>
