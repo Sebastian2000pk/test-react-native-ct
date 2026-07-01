@@ -2,9 +2,9 @@ import { Image } from "expo-image";
 import { router } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import { Job } from "@/interfaces/job";
-import { Spacing } from "@/constants/theme";
 import { FavoriteButton } from "@/components/FavoriteButton";
+import { Spacing } from "@/constants/theme";
+import { Job } from "@/interfaces/job";
 
 export const JobCard = ({ job }: { job: Job }) => {
   return (
@@ -12,25 +12,31 @@ export const JobCard = ({ job }: { job: Job }) => {
       style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
       onPress={() => router.push(`/job/${job.id}`)}
     >
-      <Image
-        source={{ uri: job.company_logo }}
-        style={styles.logo}
-        contentFit="contain"
-      />
+      <View style={styles.header}>
+        <Image
+          source={{ uri: job.company_logo }}
+          style={styles.logo}
+          contentFit="contain"
+        />
 
-      <View style={styles.info}>
-        <Text style={styles.title} numberOfLines={2}>
-          {job.title}
-        </Text>
-        <Text style={styles.company} numberOfLines={1}>
-          {job.company_name}
-        </Text>
-        {!!job.salary && (
-          <Text style={styles.salary} numberOfLines={1}>
-            {job.salary}
+        <View style={styles.info}>
+          <Text style={styles.title} numberOfLines={2}>
+            {job.title}
           </Text>
-        )}
+          <Text style={styles.company} numberOfLines={1}>
+            {job.company_name}
+          </Text>
+          {!!job.salary && (
+            <Text style={styles.salary} numberOfLines={1}>
+              {job.salary}
+            </Text>
+          )}
+        </View>
 
+        <FavoriteButton job={job} variant="card" />
+      </View>
+
+      {(!!job.job_type || !!job.candidate_required_location) && (
         <View style={styles.metaRow}>
           {!!job.job_type && (
             <View style={styles.badge}>
@@ -47,17 +53,13 @@ export const JobCard = ({ job }: { job: Job }) => {
             </View>
           )}
         </View>
-      </View>
-
-      <FavoriteButton job={job} variant="card" />
+      )}
     </Pressable>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
-    flexDirection: "row",
-    alignItems: "flex-start",
     padding: Spacing.three,
     borderRadius: 18,
     backgroundColor: "#fff",
@@ -68,6 +70,10 @@ const styles = StyleSheet.create({
   },
   cardPressed: {
     backgroundColor: "#fafafa",
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "flex-start",
   },
   logo: {
     width: 52,
@@ -98,8 +104,10 @@ const styles = StyleSheet.create({
   metaRow: {
     flexDirection: "row",
     flexWrap: "wrap",
+    justifyContent: "flex-end",
+    width: "100%",
     gap: 6,
-    marginTop: 6,
+    marginTop: Spacing.three,
   },
   badge: {
     backgroundColor: "#F0F0F3",
