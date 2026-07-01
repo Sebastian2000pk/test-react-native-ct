@@ -1,15 +1,15 @@
-import * as WebBrowser from "expo-web-browser";
-import { Image } from "expo-image";
-import { Ionicons } from "@expo/vector-icons";
-import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useFavoritesStore } from "@/stores/useFavoritesStore";
-import { useJobsStore } from "@/stores/useJobsStore";
-import { Spacing } from "@/constants/theme";
 import { Button } from "@/components/Button";
 import { FavoriteButton } from "@/components/FavoriteButton";
+import { Spacing } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
+import { useFavoritesStore } from "@/stores/useFavoritesStore";
+import { useJobsStore } from "@/stores/useJobsStore";
+import { Ionicons } from "@expo/vector-icons";
+import { Image } from "expo-image";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import * as WebBrowser from "expo-web-browser";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const stripHtml = (html: string) =>
   html
@@ -30,16 +30,18 @@ export const JobDetailScreen = () => {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const jobFromStore = useJobsStore((s) =>
-    s.jobs.find((j) => String(j.id) === id)
+    s.jobs.find((j) => String(j.id) === id),
   );
   const jobFromFav = useFavoritesStore((s) =>
-    s.favorites.find((j) => String(j.id) === id)
+    s.favorites.find((j) => String(j.id) === id),
   );
   const job = jobFromStore ?? jobFromFav;
 
   if (!job) {
     return (
-      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+      <SafeAreaView
+        style={[styles.container, { backgroundColor: colors.background }]}
+      >
         <Text style={[styles.notFound, { color: colors.textSecondary }]}>
           Empleo no encontrado
         </Text>
@@ -48,7 +50,10 @@ export const JobDetailScreen = () => {
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={["bottom"]}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+      edges={["bottom"]}
+    >
       <Stack.Screen
         options={{
           title: job.company_name,
@@ -75,14 +80,21 @@ export const JobDetailScreen = () => {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
-          <View style={[styles.logoWrapper, { backgroundColor: colors.backgroundElement }]}>
+          <View
+            style={[
+              styles.logoWrapper,
+              { backgroundColor: colors.backgroundElement },
+            ]}
+          >
             <Image
               source={{ uri: job.company_logo }}
               style={styles.logo}
               contentFit="contain"
             />
           </View>
-          <Text style={[styles.title, { color: colors.text }]}>{job.title}</Text>
+          <Text style={[styles.title, { color: colors.text }]}>
+            {job.title}
+          </Text>
           <Text style={[styles.company, { color: colors.textSecondary }]}>
             {job.company_name}
           </Text>
@@ -91,7 +103,11 @@ export const JobDetailScreen = () => {
         <View style={styles.metaList}>
           {!!job.candidate_required_location && (
             <View style={styles.metaRow}>
-              <Ionicons name="location-outline" size={16} color={colors.textSecondary} />
+              <Ionicons
+                name="location-outline"
+                size={16}
+                color={colors.textSecondary}
+              />
               <Text style={[styles.metaText, { color: colors.textSecondary }]}>
                 {job.candidate_required_location}
               </Text>
@@ -99,7 +115,11 @@ export const JobDetailScreen = () => {
           )}
           {!!job.job_type && (
             <View style={styles.metaRow}>
-              <Ionicons name="briefcase-outline" size={16} color={colors.textSecondary} />
+              <Ionicons
+                name="briefcase-outline"
+                size={16}
+                color={colors.textSecondary}
+              />
               <Text style={[styles.metaText, { color: colors.textSecondary }]}>
                 {job.job_type.replace(/_/g, " ")}
               </Text>
@@ -107,7 +127,11 @@ export const JobDetailScreen = () => {
           )}
           {!!job.category && (
             <View style={styles.metaRow}>
-              <Ionicons name="pricetag-outline" size={16} color={colors.textSecondary} />
+              <Ionicons
+                name="pricetag-outline"
+                size={16}
+                color={colors.textSecondary}
+              />
               <Text style={[styles.metaText, { color: colors.textSecondary }]}>
                 {job.category}
               </Text>
@@ -116,42 +140,59 @@ export const JobDetailScreen = () => {
         </View>
 
         {!!job.salary && (
-          <View style={[styles.salaryPill, { backgroundColor: colors.backgroundElement }]}>
+          <View
+            style={[
+              styles.salaryPill,
+              { backgroundColor: colors.backgroundElement },
+            ]}
+          >
             <Ionicons name="cash-outline" size={16} color={colors.text} />
-            <Text style={[styles.salaryText, { color: colors.text }]}>{job.salary}</Text>
+            <Text style={[styles.salaryText, { color: colors.text }]}>
+              {job.salary}
+            </Text>
           </View>
         )}
 
         {job.tags.length > 0 && (
           <View style={styles.tagsRow}>
             {job.tags.slice(0, 8).map((tag) => (
-              <View key={tag} style={[styles.tagChip, { backgroundColor: colors.backgroundElement }]}>
-                <Text style={[styles.tagText, { color: colors.textSecondary }]}>{tag}</Text>
+              <View
+                key={tag}
+                style={[
+                  styles.tagChip,
+                  { backgroundColor: colors.backgroundElement },
+                ]}
+              >
+                <Text style={[styles.tagText, { color: colors.textSecondary }]}>
+                  {tag}
+                </Text>
               </View>
             ))}
           </View>
         )}
 
-        <View style={styles.actions}>
-          <Button
-            variant="primary"
-            onPress={() => WebBrowser.openBrowserAsync(job.url)}
-            style={styles.applyBtn}
-          >
-            <Text style={styles.applyBtnText}>Aplicar ahora</Text>
-          </Button>
-          <FavoriteButton job={job} variant="detail" />
-        </View>
-
         {!!job.description && (
           <View style={styles.descContainer}>
-            <Text style={[styles.descTitle, { color: colors.text }]}>Descripción</Text>
+            <Text style={[styles.descTitle, { color: colors.text }]}>
+              Descripción
+            </Text>
             <Text style={[styles.descText, { color: colors.textSecondary }]}>
               {stripHtml(job.description)}
             </Text>
           </View>
         )}
       </ScrollView>
+
+      <View style={styles.footer}>
+        <FavoriteButton job={job} variant="detail" />
+        <Button
+          variant="primary"
+          onPress={() => WebBrowser.openBrowserAsync(job.url)}
+          style={styles.applyBtn}
+        >
+          <Text style={styles.applyBtnText}>Aplicar ahora</Text>
+        </Button>
+      </View>
     </SafeAreaView>
   );
 };
@@ -232,11 +273,16 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.one,
   },
   tagText: { fontSize: 12 },
-  actions: {
+  footer: {
     flexDirection: "row",
     alignItems: "center",
     gap: Spacing.two,
-    marginBottom: Spacing.four,
+    backgroundColor: "#fff",
+    paddingHorizontal: Spacing.four,
+    paddingTop: Spacing.two,
+    paddingBottom: Spacing.three,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: "#eee",
   },
   applyBtn: { flex: 1 },
   applyBtnText: { color: "#fff", fontWeight: "700", fontSize: 16 },
