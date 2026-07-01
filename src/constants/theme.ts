@@ -51,6 +51,8 @@ export const Fonts = Platform.select({
   },
 });
 
+export const AccentColor = '#4F46E5';
+
 export const Spacing = {
   half: 2,
   one: 4,
