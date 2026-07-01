@@ -271,7 +271,7 @@ export const JobFilters = () => {
   return (
     <>
       <Button
-        variant="outline"
+        variant="secondary"
         style={styles.filterButton}
         onPress={() => setFiltersOpen(true)}
       >
