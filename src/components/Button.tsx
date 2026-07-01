@@ -1,4 +1,4 @@
-import { Spacing } from "@/constants/theme";
+import { AccentColor, Spacing } from "@/constants/theme";
 import { ReactNode } from "react";
 import {
   StyleProp,
@@ -7,7 +7,7 @@ import {
   ViewStyle,
 } from "react-native";
 
-export type ButtonVariant = "primary" | "secondary" | "outline";
+export type ButtonVariant = "primary" | "secondary";
 
 interface ButtonProps {
   variant?: ButtonVariant;
@@ -49,17 +49,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 10,
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.two,
+    borderRadius: 14,
+    paddingHorizontal: Spacing.four,
+    paddingVertical: Spacing.two + 4,
   },
   primary: {
-    backgroundColor: "#111",
+    backgroundColor: AccentColor,
   },
   secondary: {
-    backgroundColor: "#F0F0F3",
-  },
-  outline: {
     backgroundColor: "#fff",
     borderWidth: 1,
     borderColor: "#e5e5e5",
