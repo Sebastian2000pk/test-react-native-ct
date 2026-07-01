@@ -75,11 +75,13 @@ export const JobDetailScreen = () => {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
-          <Image
-            source={{ uri: job.company_logo }}
-            style={[styles.logo, { backgroundColor: colors.backgroundElement }]}
-            contentFit="contain"
-          />
+          <View style={[styles.logoWrapper, { backgroundColor: colors.backgroundElement }]}>
+            <Image
+              source={{ uri: job.company_logo }}
+              style={styles.logo}
+              contentFit="contain"
+            />
+          </View>
           <Text style={[styles.title, { color: colors.text }]}>{job.title}</Text>
           <Text style={[styles.company, { color: colors.textSecondary }]}>
             {job.company_name}
@@ -172,11 +174,18 @@ const styles = StyleSheet.create({
     paddingVertical: 0,
   },
   header: { alignItems: "center", marginBottom: Spacing.four },
-  logo: {
-    width: 72,
-    height: 72,
-    borderRadius: 18,
+  logoWrapper: {
+    width: 80,
+    height: 80,
+    borderRadius: 22,
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: Spacing.three,
+  },
+  logo: {
+    width: 60,
+    height: 60,
+    borderRadius: 14,
   },
   title: {
     fontSize: 22,
