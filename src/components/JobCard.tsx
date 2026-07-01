@@ -25,6 +25,11 @@ export const JobCard = ({ job }: { job: Job }) => {
         <Text style={styles.company} numberOfLines={1}>
           {job.company_name}
         </Text>
+        {!!job.salary && (
+          <Text style={styles.salary} numberOfLines={1}>
+            {job.salary}
+          </Text>
+        )}
 
         <View style={styles.metaRow}>
           {!!job.job_type && (
@@ -85,6 +90,11 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#777",
   },
+  salary: {
+    fontSize: 13,
+    color: "#1a7d3a",
+    fontWeight: "600",
+  },
   metaRow: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -103,5 +113,11 @@ const styles = StyleSheet.create({
     color: "#60646C",
     fontWeight: "500",
     textTransform: "capitalize",
+  },
+  salaryBadge: {
+    backgroundColor: "#d4edda",
+  },
+  salaryText: {
+    color: "#155724",
   },
 });
