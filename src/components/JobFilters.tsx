@@ -1,3 +1,7 @@
+import { Button } from "@/components/Button";
+import { Spacing } from "@/constants/theme";
+import { useJobsStore } from "@/stores/useJobsStore";
+import { Ionicons } from "@expo/vector-icons";
 import { useRef, useState } from "react";
 import {
   Animated,
@@ -6,12 +10,9 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
-import { useJobsStore } from "@/stores/useJobsStore";
-import { Spacing } from "@/constants/theme";
 
 const JOB_TYPES = [
   { value: "full_time", label: "Full time" },
@@ -82,11 +83,18 @@ const DropdownPicker = ({
 
   return (
     <>
-      <TouchableOpacity style={styles.trigger} onPress={openSheet} activeOpacity={0.7}>
+      <TouchableOpacity
+        style={styles.trigger}
+        onPress={openSheet}
+        activeOpacity={0.7}
+      >
         <View style={styles.triggerInner}>
           <Text style={styles.triggerLabel}>{label}</Text>
           <Text
-            style={[styles.triggerValue, !selectedLabel && styles.triggerPlaceholder]}
+            style={[
+              styles.triggerValue,
+              !selectedLabel && styles.triggerPlaceholder,
+            ]}
             numberOfLines={1}
           >
             {selectedLabel ?? placeholder}
@@ -95,10 +103,20 @@ const DropdownPicker = ({
         <Text style={[styles.chevron, open && styles.chevronOpen]}>›</Text>
       </TouchableOpacity>
 
-      <Modal visible={open} transparent animationType="none" onRequestClose={() => closeSheet()}>
+      <Modal
+        visible={open}
+        transparent
+        animationType="none"
+        onRequestClose={() => closeSheet()}
+      >
         <View style={StyleSheet.absoluteFill}>
-          <Animated.View style={[styles.backdrop, { opacity: backdropOpacity }]}>
-            <Pressable style={StyleSheet.absoluteFill} onPress={() => closeSheet()} />
+          <Animated.View
+            style={[styles.backdrop, { opacity: backdropOpacity }]}
+          >
+            <Pressable
+              style={StyleSheet.absoluteFill}
+              onPress={() => closeSheet()}
+            />
           </Animated.View>
 
           <View style={styles.sheetWrapper}>
@@ -114,7 +132,9 @@ const DropdownPicker = ({
                   onPress={() => closeSheet("")}
                   activeOpacity={0.6}
                 >
-                  <Text style={[styles.optionText, !value && styles.optionActive]}>
+                  <Text
+                    style={[styles.optionText, !value && styles.optionActive]}
+                  >
                     {placeholder}
                   </Text>
                   {!value && <Text style={styles.check}>✓</Text>}
@@ -127,7 +147,12 @@ const DropdownPicker = ({
                     onPress={() => closeSheet(opt.value)}
                     activeOpacity={0.6}
                   >
-                    <Text style={[styles.optionText, value === opt.value && styles.optionActive]}>
+                    <Text
+                      style={[
+                        styles.optionText,
+                        value === opt.value && styles.optionActive,
+                      ]}
+                    >
                       {opt.label}
                     </Text>
                     {value === opt.value && <Text style={styles.check}>✓</Text>}
@@ -142,62 +167,166 @@ const DropdownPicker = ({
   );
 };
 
+const FilterSheet = ({
+  visible,
+  onClose,
+  children,
+}: {
+  visible: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+}) => {
+  const backdropOpacity = useRef(new Animated.Value(0)).current;
+  const sheetY = useRef(new Animated.Value(400)).current;
+
+  const animateIn = () => {
+    Animated.parallel([
+      Animated.timing(backdropOpacity, {
+        toValue: 1,
+        duration: 220,
+        useNativeDriver: true,
+      }),
+      Animated.spring(sheetY, {
+        toValue: 0,
+        damping: 18,
+        stiffness: 200,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
+  const animateOut = (after: () => void) => {
+    Animated.parallel([
+      Animated.timing(backdropOpacity, {
+        toValue: 0,
+        duration: 180,
+        useNativeDriver: true,
+      }),
+      Animated.timing(sheetY, {
+        toValue: 400,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      sheetY.setValue(400);
+      after();
+    });
+  };
+
+  return (
+    <Modal
+      visible={visible}
+      transparent
+      animationType="none"
+      onShow={animateIn}
+      onRequestClose={() => animateOut(onClose)}
+    >
+      <View style={StyleSheet.absoluteFill}>
+        <Animated.View style={[styles.backdrop, { opacity: backdropOpacity }]}>
+          <Pressable
+            style={StyleSheet.absoluteFill}
+            onPress={() => animateOut(onClose)}
+          />
+        </Animated.View>
+
+        <View style={styles.sheetWrapper}>
+          <Animated.View
+            style={[
+              styles.filterSheet,
+              { transform: [{ translateY: sheetY }] },
+            ]}
+          >
+            <View style={styles.sheetHandle} />
+            <View style={styles.filterSheetHeader}>
+              <Text style={styles.sheetTitle}>Filtros</Text>
+              <TouchableOpacity
+                onPress={() => animateOut(onClose)}
+                hitSlop={8}
+              >
+                <Ionicons name="close" size={22} color="#888" />
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.filterSheetBody}>{children}</View>
+          </Animated.View>
+        </View>
+      </View>
+    </Modal>
+  );
+};
+
 export const JobFilters = () => {
-  const { search, category, jobType, categories, setSearch, setCategory, setJobType } =
+  const { category, jobType, categories, setCategory, setJobType } =
     useJobsStore();
+
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const categoryOptions: Option[] = categories.map((c) => ({
     value: c.name,
     label: c.name,
   }));
 
+  const activeFilterCount = [category, jobType].filter(Boolean).length;
+
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.search}
-        placeholder="Buscar por título o empresa"
-        placeholderTextColor="#aaa"
-        value={search}
-        onChangeText={setSearch}
-        returnKeyType="search"
-        clearButtonMode="while-editing"
-      />
+    <>
+      <Button
+        variant="outline"
+        style={styles.filterButton}
+        onPress={() => setFiltersOpen(true)}
+      >
+        <Ionicons name="options-outline" size={20} color="#111" />
+        {activeFilterCount > 0 && (
+          <View style={styles.filterBadge}>
+            <Text style={styles.filterBadgeText}>{activeFilterCount}</Text>
+          </View>
+        )}
+      </Button>
 
-      <DropdownPicker
-        label="Categoría"
-        placeholder="Todas las categorías"
-        value={category}
-        options={categoryOptions}
-        onSelect={setCategory}
-      />
+      <FilterSheet visible={filtersOpen} onClose={() => setFiltersOpen(false)}>
+        <DropdownPicker
+          label="Categoría"
+          placeholder="Todas las categorías"
+          value={category}
+          options={categoryOptions}
+          onSelect={setCategory}
+        />
 
-      <DropdownPicker
-        label="Tipo de empleo"
-        placeholder="Todos los tipos"
-        value={jobType}
-        options={JOB_TYPES}
-        onSelect={setJobType}
-      />
-    </View>
+        <DropdownPicker
+          label="Tipo de empleo"
+          placeholder="Todos los tipos"
+          value={jobType}
+          options={JOB_TYPES}
+          onSelect={setJobType}
+        />
+      </FilterSheet>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    gap: Spacing.two,
-    paddingHorizontal: Spacing.three,
-    paddingBottom: Spacing.two,
+  filterButton: {
+    width: 40,
+    height: 40,
+    paddingHorizontal: 0,
+    paddingVertical: 0,
   },
-  search: {
-    borderWidth: 1,
-    borderColor: "#e5e5e5",
-    borderRadius: 10,
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.two,
-    fontSize: 14,
-    backgroundColor: "#fff",
-    color: "#111",
+  filterBadge: {
+    position: "absolute",
+    top: -4,
+    right: -4,
+    minWidth: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: "#111",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 3,
+  },
+  filterBadgeText: {
+    fontSize: 10,
+    fontWeight: "700",
+    color: "#fff",
   },
   trigger: {
     flexDirection: "row",
@@ -271,6 +400,29 @@ const styles = StyleSheet.create({
     color: "#111",
     paddingHorizontal: Spacing.three,
     marginBottom: Spacing.two,
+  },
+  filterSheet: {
+    backgroundColor: "#fff",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingTop: Spacing.two,
+    paddingBottom: Spacing.six,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 16,
+  },
+  filterSheetHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: Spacing.three,
+    marginBottom: Spacing.two,
+  },
+  filterSheetBody: {
+    paddingHorizontal: Spacing.three,
+    gap: Spacing.two,
   },
   option: {
     flexDirection: "row",

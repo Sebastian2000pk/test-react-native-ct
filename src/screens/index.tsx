@@ -1,7 +1,9 @@
 import { useEffect, useMemo } from "react";
-import { FlatList, RefreshControl, StyleSheet } from "react-native";
+import { FlatList, RefreshControl, StyleSheet, View } from "react-native";
+import { Spacing } from "../constants/theme";
 import { JobCard } from "../components/JobCard";
 import { JobFilters } from "../components/JobFilters";
+import { SearchBar } from "../components/SearchBar";
 import { StateView } from "../components/StateView";
 import { useJobsStore } from "../stores/useJobsStore";
 
@@ -42,7 +44,10 @@ export const JobsScreen = () => {
 
   return (
     <>
-      <JobFilters />
+      <View style={styles.filtersRow}>
+        <SearchBar />
+        <JobFilters />
+      </View>
       <FlatList
         style={styles.list}
         contentContainerStyle={styles.listContent}
@@ -62,6 +67,14 @@ export const JobsScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  filtersRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    gap: Spacing.two,
+    paddingHorizontal: Spacing.three,
+    paddingVertical: Spacing.two,
+  },
   list: {
     flex: 1,
     width: "100%",
