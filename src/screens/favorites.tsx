@@ -2,12 +2,14 @@ import { FlatList, StyleSheet, Text, View } from "react-native";
 import { JobCard } from "../components/JobCard";
 import { StateView } from "../components/StateView";
 import { useFavoritesStore } from "../stores/useFavoritesStore";
+import { useTheme } from "../hooks/use-theme";
 
 export const FavoritesScreen = () => {
   const { favorites } = useFavoritesStore();
+  const colors = useTheme();
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Text style={styles.heading}>Favoritos</Text>
       <FlatList
         style={styles.list}
@@ -25,7 +27,6 @@ export const FavoritesScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f9f9f9",
   },
   heading: {
     fontSize: 22,

@@ -14,7 +14,10 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={styles.safeArea} edges={["bottom", "left", "right"]}>
+      <SafeAreaView
+        style={[styles.safeArea, { backgroundColor: colors.background }]}
+        edges={["bottom", "left", "right"]}
+      >
         <Stack>
           <Stack.Screen
             name="index"
@@ -43,7 +46,7 @@ export default function RootLayout() {
               headerShown: true,
               headerBackTitle: "Atrás",
               headerShadowVisible: false,
-              headerStyle: { backgroundColor: "#fff" },
+              headerStyle: { backgroundColor: colors.background },
               title: "",
             }}
           />

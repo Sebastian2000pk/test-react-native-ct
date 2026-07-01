@@ -7,6 +7,7 @@ import { useFavoritesStore } from "@/stores/useFavoritesStore";
 import { useJobsStore } from "@/stores/useJobsStore";
 import { Spacing } from "@/constants/theme";
 import { FavoriteButton } from "@/components/FavoriteButton";
+import { useTheme } from "@/hooks/use-theme";
 
 const stripHtml = (html: string) =>
   html
@@ -23,6 +24,7 @@ const stripHtml = (html: string) =>
     .trim();
 
 export const JobDetailScreen = () => {
+  const colors = useTheme();
   const { id } = useLocalSearchParams<{ id: string }>();
   const jobFromStore = useJobsStore((s) =>
     s.jobs.find((j) => String(j.id) === id)
@@ -34,20 +36,20 @@ export const JobDetailScreen = () => {
 
   if (!job) {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
         <Text style={styles.notFound}>Empleo no encontrado</Text>
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container} edges={["bottom"]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={["bottom"]}>
       <Stack.Screen
         options={{
           title: job.company_name,
           headerBackTitle: "Atrás",
           headerShadowVisible: false,
-          headerStyle: { backgroundColor: "#fff" },
+          headerStyle: { backgroundColor: colors.background },
         }}
       />
       <ScrollView
