@@ -170,10 +170,14 @@ const DropdownPicker = ({
 const FilterSheet = ({
   visible,
   onClose,
+  onClear,
+  showClear,
   children,
 }: {
   visible: boolean;
   onClose: () => void;
+  onClear: () => void;
+  showClear: boolean;
   children: React.ReactNode;
 }) => {
   const backdropOpacity = useRef(new Animated.Value(0)).current;
@@ -247,7 +251,19 @@ const FilterSheet = ({
             <View style={styles.filterSheetBody}>{children}</View>
 
             <View style={styles.filterSheetFooter}>
-              <Button onPress={() => animateOut(onClose)}>
+              {showClear && (
+                <Button
+                  variant="secondary"
+                  style={styles.clearButton}
+                  onPress={onClear}
+                >
+                  <Text style={styles.clearButtonText}>Limpiar filtros</Text>
+                </Button>
+              )}
+              <Button
+                style={styles.applyButton}
+                onPress={() => animateOut(onClose)}
+              >
                 <Text style={styles.applyButtonText}>Aplicar filtros</Text>
               </Button>
             </View>
@@ -259,8 +275,14 @@ const FilterSheet = ({
 };
 
 export const JobFilters = () => {
-  const { category, jobType, categories, setCategory, setJobType } =
-    useJobsStore();
+  const {
+    category,
+    jobType,
+    categories,
+    setCategory,
+    setJobType,
+    clearFilters,
+  } = useJobsStore();
 
   const [filtersOpen, setFiltersOpen] = useState(false);
 
@@ -286,7 +308,12 @@ export const JobFilters = () => {
         )}
       </Button>
 
-      <FilterSheet visible={filtersOpen} onClose={() => setFiltersOpen(false)}>
+      <FilterSheet
+        visible={filtersOpen}
+        onClose={() => setFiltersOpen(false)}
+        onClear={clearFilters}
+        showClear={activeFilterCount > 0}
+      >
         <DropdownPicker
           label="Categoría"
           placeholder="Todas las categorías"
@@ -428,8 +455,21 @@ const styles = StyleSheet.create({
     gap: Spacing.two,
   },
   filterSheetFooter: {
+    flexDirection: "row",
     paddingHorizontal: Spacing.three,
     marginTop: Spacing.five,
+    gap: Spacing.two,
+  },
+  clearButton: {
+    flex: 1,
+  },
+  clearButtonText: {
+    fontSize: 15,
+    fontWeight: "700",
+    color: "#111",
+  },
+  applyButton: {
+    flex: 1,
   },
   applyButtonText: {
     fontSize: 15,

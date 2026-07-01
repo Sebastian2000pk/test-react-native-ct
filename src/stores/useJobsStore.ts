@@ -17,6 +17,7 @@ interface JobsState {
   setSearch: (s: string) => void;
   setCategory: (c: string) => void;
   setJobType: (t: string) => void;
+  clearFilters: () => void;
 }
 
 export const useJobsStore = create<JobsState>((set) => ({
@@ -49,4 +50,5 @@ export const useJobsStore = create<JobsState>((set) => ({
   setSearch: (search) => set({ search }),
   setCategory: (category) => set({ category }),
   setJobType: (jobType) => set({ jobType }),
+  clearFilters: () => set({ category: "", jobType: "" }),
 }));
