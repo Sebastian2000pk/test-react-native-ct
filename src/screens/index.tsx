@@ -6,8 +6,16 @@ import { StateView } from "../components/StateView";
 import { useJobsStore } from "../stores/useJobsStore";
 
 export const JobsScreen = () => {
-  const { status, error, jobs, search, category, jobType, loadJobs, loadCategories } =
-    useJobsStore();
+  const {
+    status,
+    error,
+    jobs,
+    search,
+    category,
+    jobType,
+    loadJobs,
+    loadCategories,
+  } = useJobsStore();
 
   const data = useMemo(() => {
     const q = search.trim().toLowerCase();

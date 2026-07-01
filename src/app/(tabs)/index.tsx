@@ -1,4 +1,4 @@
-import { BottomTabInset, MaxContentWidth, Spacing } from "@/constants/theme";
+import { Spacing } from "@/constants/theme";
 import { JobsScreen } from "@/screens/index";
 import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -14,10 +14,8 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    paddingHorizontal: Spacing.four,
+    paddingHorizontal: Spacing.two,
     alignItems: "center",
     gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
   },
 });
