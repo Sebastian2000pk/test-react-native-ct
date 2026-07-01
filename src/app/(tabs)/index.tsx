@@ -1,18 +1,17 @@
 import { Spacing } from "@/constants/theme";
 import { JobsScreen } from "@/screens/index";
-import { StyleSheet } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { StyleSheet, View } from "react-native";
 
 export default function HomeScreen() {
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.container}>
       <JobsScreen />
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
+  container: {
     flex: 1,
     paddingHorizontal: Spacing.two,
     alignItems: "center",

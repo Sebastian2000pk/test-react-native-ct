@@ -45,6 +45,7 @@ export const JobsScreen = () => {
       <JobFilters />
       <FlatList
         style={styles.list}
+        contentContainerStyle={styles.listContent}
         data={data}
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => <JobCard job={item} />}
@@ -64,5 +65,8 @@ const styles = StyleSheet.create({
   list: {
     flex: 1,
     width: "100%",
+  },
+  listContent: {
+    paddingBottom: 16,
   },
 });
