@@ -1,8 +1,8 @@
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import { JobCard } from "../components/JobCard";
 import { StateView } from "../components/StateView";
-import { useFavoritesStore } from "../stores/useFavoritesStore";
 import { useTheme } from "../hooks/use-theme";
+import { useFavoritesStore } from "../stores/useFavoritesStore";
 
 export const FavoritesScreen = () => {
   const { favorites } = useFavoritesStore();
@@ -10,7 +10,6 @@ export const FavoritesScreen = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={styles.heading}>Favoritos</Text>
       <FlatList
         style={styles.list}
         data={favorites}
