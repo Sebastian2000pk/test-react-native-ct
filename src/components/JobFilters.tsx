@@ -239,15 +239,18 @@ const FilterSheet = ({
             <View style={styles.sheetHandle} />
             <View style={styles.filterSheetHeader}>
               <Text style={styles.sheetTitle}>Filtros</Text>
-              <TouchableOpacity
-                onPress={() => animateOut(onClose)}
-                hitSlop={8}
-              >
+              <TouchableOpacity onPress={() => animateOut(onClose)} hitSlop={8}>
                 <Ionicons name="close" size={22} color="#888" />
               </TouchableOpacity>
             </View>
 
             <View style={styles.filterSheetBody}>{children}</View>
+
+            <View style={styles.filterSheetFooter}>
+              <Button onPress={() => animateOut(onClose)}>
+                <Text style={styles.applyButtonText}>Aplicar filtros</Text>
+              </Button>
+            </View>
           </Animated.View>
         </View>
       </View>
@@ -406,7 +409,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     paddingTop: Spacing.two,
-    paddingBottom: Spacing.six,
+    paddingBottom: Spacing.four,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: -4 },
     shadowOpacity: 0.08,
@@ -423,6 +426,15 @@ const styles = StyleSheet.create({
   filterSheetBody: {
     paddingHorizontal: Spacing.three,
     gap: Spacing.two,
+  },
+  filterSheetFooter: {
+    paddingHorizontal: Spacing.three,
+    marginTop: Spacing.five,
+  },
+  applyButtonText: {
+    fontSize: 15,
+    fontWeight: "700",
+    color: "#fff",
   },
   option: {
     flexDirection: "row",
