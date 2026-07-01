@@ -6,6 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
 import { useJobsStore } from "@/stores/useJobsStore";
 import { Spacing } from "@/constants/theme";
+import { FavoriteButton } from "@/components/FavoriteButton";
 
 const stripHtml = (html: string) =>
   html
@@ -30,11 +31,6 @@ export const JobDetailScreen = () => {
     s.favorites.find((j) => String(j.id) === id)
   );
   const job = jobFromStore ?? jobFromFav;
-
-  const toggle = useFavoritesStore((s) => s.toggle);
-  const fav = useFavoritesStore((s) =>
-    s.favorites.some((j) => j.id === job?.id)
-  );
 
   if (!job) {
     return (
@@ -120,11 +116,7 @@ export const JobDetailScreen = () => {
           >
             <Text style={styles.applyBtnText}>Aplicar ahora</Text>
           </Pressable>
-          <Pressable style={styles.favBtn} onPress={() => toggle(job)}>
-            <Text style={[styles.heart, fav && styles.heartActive]}>
-              {fav ? "♥" : "♡"}
-            </Text>
-          </Pressable>
+          <FavoriteButton job={job} variant="detail" />
         </View>
 
         {!!job.description && (
@@ -208,17 +200,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   applyBtnText: { color: "#fff", fontWeight: "700", fontSize: 16 },
-  favBtn: {
-    width: 50,
-    height: 50,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: "#e5e5e5",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  heart: { fontSize: 22, color: "#aaa" },
-  heartActive: { color: "#e53e3e" },
   descContainer: { marginTop: Spacing.two },
   descTitle: {
     fontSize: 18,

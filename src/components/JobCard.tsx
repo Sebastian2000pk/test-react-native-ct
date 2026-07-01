@@ -4,12 +4,9 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { Job } from "@/interfaces/job";
 import { Spacing } from "@/constants/theme";
-import { useFavoritesStore } from "@/stores/useFavoritesStore";
+import { FavoriteButton } from "@/components/FavoriteButton";
 
 export const JobCard = ({ job }: { job: Job }) => {
-  const toggle = useFavoritesStore((s) => s.toggle);
-  const fav = useFavoritesStore((s) => s.favorites.some((j) => j.id === job.id));
-
   return (
     <Pressable
       style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
@@ -47,15 +44,7 @@ export const JobCard = ({ job }: { job: Job }) => {
         </View>
       </View>
 
-      <Pressable
-        onPress={() => toggle(job)}
-        style={({ pressed }) => [styles.favBtn, pressed && styles.favBtnPressed]}
-        hitSlop={8}
-      >
-        <Text style={[styles.heart, fav && styles.heartActive]}>
-          {fav ? "♥" : "♡"}
-        </Text>
-      </Pressable>
+      <FavoriteButton job={job} variant="card" />
     </Pressable>
   );
 };
@@ -114,23 +103,5 @@ const styles = StyleSheet.create({
     color: "#60646C",
     fontWeight: "500",
     textTransform: "capitalize",
-  },
-  favBtn: {
-    justifyContent: "center",
-    alignItems: "center",
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    marginLeft: Spacing.one,
-  },
-  favBtnPressed: {
-    backgroundColor: "#F0F0F3",
-  },
-  heart: {
-    fontSize: 20,
-    color: "#c7c7cc",
-  },
-  heartActive: {
-    color: "#e53e3e",
   },
 });
