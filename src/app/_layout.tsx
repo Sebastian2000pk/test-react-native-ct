@@ -5,12 +5,38 @@ import {
   SafeAreaView,
 } from "react-native-safe-area-context";
 
+import { FavoritesButton } from "@/components/header/FavoritesButton";
+import { ProfileIcon } from "@/components/header/ProfileIcon";
+import { useTheme } from "@/hooks/use-theme";
+
 export default function RootLayout() {
+  const colors = useTheme();
+
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={styles.safeArea}>
+      <SafeAreaView style={styles.safeArea} edges={["bottom", "left", "right"]}>
         <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="index"
+            options={{
+              headerShown: true,
+              headerTitle: "",
+              headerShadowVisible: false,
+              headerStyle: { backgroundColor: colors.background },
+              headerLeft: () => <ProfileIcon />,
+              headerRight: () => <FavoritesButton />,
+            }}
+          />
+          <Stack.Screen
+            name="favorites"
+            options={{
+              headerShown: true,
+              headerBackTitle: "Atrás",
+              headerShadowVisible: false,
+              headerStyle: { backgroundColor: colors.background },
+              title: "Favoritos",
+            }}
+          />
           <Stack.Screen
             name="job/[id]"
             options={{
