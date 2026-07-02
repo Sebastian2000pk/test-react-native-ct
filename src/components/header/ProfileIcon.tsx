@@ -10,16 +10,16 @@ export const ProfileIcon = () => {
     <View
       style={[styles.circle, { backgroundColor: colors.backgroundElement }]}
     >
-      <Ionicons name="person" size={18} color={colors.textSecondary} />
+      <Ionicons name="person" size={20} color={colors.textSecondary} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   circle: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     justifyContent: "center",
     alignItems: "center",
   },

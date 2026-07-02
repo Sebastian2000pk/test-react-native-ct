@@ -16,16 +16,16 @@ export const BackButton = () => {
       style={styles.btn}
       hitSlop={8}
     >
-      <Ionicons name="chevron-back" size={18} color={colors.textSecondary} />
+      <Ionicons name="chevron-back" size={22} color={colors.textSecondary} />
     </Button>
   );
 };
 
 const styles = StyleSheet.create({
   btn: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     paddingHorizontal: 0,
     paddingVertical: 0,
   },

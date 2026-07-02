@@ -89,7 +89,11 @@ export const JobDetailScreen = () => {
               style={styles.backBtn}
               hitSlop={8}
             >
-              <Ionicons name="chevron-back" size={20} color={colors.text} />
+              <Ionicons
+                name="chevron-back"
+                size={22}
+                color={colors.textSecondary}
+              />
             </Button>
           ),
         }}
@@ -178,9 +182,9 @@ const styles = StyleSheet.create({
   scroll: { padding: Spacing.four, paddingBottom: Spacing.six },
   notFound: { textAlign: "center", marginTop: 40 },
   backBtn: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     paddingHorizontal: 0,
     paddingVertical: 0,
   },
