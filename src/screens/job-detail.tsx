@@ -1,6 +1,6 @@
 import { Button } from "@/components/Button";
 import { FavoriteButton } from "@/components/FavoriteButton";
-import { Spacing } from "@/constants/theme";
+import { AccentColor, Spacing } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
 import { useJobsStore } from "@/stores/useJobsStore";
@@ -36,6 +36,26 @@ export const JobDetailScreen = () => {
     s.favorites.find((j) => String(j.id) === id),
   );
   const job = jobFromStore ?? jobFromFav;
+
+  const infoItems = job
+    ? ([
+        job.candidate_required_location && {
+          icon: "location-outline" as const,
+          label: job.candidate_required_location,
+        },
+        job.job_type && {
+          icon: "briefcase-outline" as const,
+          label: job.job_type.replace(/_/g, " "),
+        },
+        job.category && {
+          icon: "pricetag-outline" as const,
+          label: job.category,
+        },
+      ].filter(Boolean) as {
+        icon: keyof typeof Ionicons.glyphMap;
+        label: string;
+      }[])
+    : [];
 
   if (!job) {
     return (
@@ -98,73 +118,23 @@ export const JobDetailScreen = () => {
           <Text style={[styles.company, { color: colors.textSecondary }]}>
             {job.company_name}
           </Text>
-        </View>
-
-        <View style={styles.metaList}>
-          {!!job.candidate_required_location && (
-            <View style={styles.metaRow}>
-              <Ionicons
-                name="location-outline"
-                size={16}
-                color={colors.textSecondary}
-              />
-              <Text style={[styles.metaText, { color: colors.textSecondary }]}>
-                {job.candidate_required_location}
-              </Text>
-            </View>
-          )}
-          {!!job.job_type && (
-            <View style={styles.metaRow}>
-              <Ionicons
-                name="briefcase-outline"
-                size={16}
-                color={colors.textSecondary}
-              />
-              <Text style={[styles.metaText, { color: colors.textSecondary }]}>
-                {job.job_type.replace(/_/g, " ")}
-              </Text>
-            </View>
-          )}
-          {!!job.category && (
-            <View style={styles.metaRow}>
-              <Ionicons
-                name="pricetag-outline"
-                size={16}
-                color={colors.textSecondary}
-              />
-              <Text style={[styles.metaText, { color: colors.textSecondary }]}>
-                {job.category}
-              </Text>
-            </View>
-          )}
-        </View>
-
-        {!!job.salary && (
-          <View
-            style={[
-              styles.salaryPill,
-              { backgroundColor: colors.backgroundElement },
-            ]}
-          >
-            <Ionicons name="cash-outline" size={16} color={colors.text} />
-            <Text style={[styles.salaryText, { color: colors.text }]}>
+          {!!job.salary && (
+            <Text style={[styles.salary, { color: AccentColor }]}>
               {job.salary}
             </Text>
-          </View>
-        )}
+          )}
+        </View>
 
-        {job.tags.length > 0 && (
-          <View style={styles.tagsRow}>
-            {job.tags.slice(0, 8).map((tag) => (
-              <View
-                key={tag}
-                style={[
-                  styles.tagChip,
-                  { backgroundColor: colors.backgroundElement },
-                ]}
-              >
-                <Text style={[styles.tagText, { color: colors.textSecondary }]}>
-                  {tag}
+        {infoItems.length > 0 && (
+          <View style={styles.infoCard}>
+            {infoItems.map((item) => (
+              <View key={item.label} style={styles.infoItem}>
+                <Ionicons name={item.icon} size={15} color={AccentColor} />
+                <Text
+                  style={[styles.infoText, { color: colors.textSecondary }]}
+                  numberOfLines={1}
+                >
+                  {item.label}
                 </Text>
               </View>
             ))}
@@ -234,45 +204,33 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: Spacing.half,
   },
+  salary: {
+    fontSize: 18,
+    fontWeight: "700",
+    textAlign: "center",
+    paddingVertical: Spacing.two,
+  },
   company: {
     fontSize: 15,
     textAlign: "center",
   },
-  metaList: {
-    gap: Spacing.two,
-    marginBottom: Spacing.three,
-  },
-  metaRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: Spacing.two,
-  },
-  metaText: { fontSize: 14 },
-  salaryPill: {
-    flexDirection: "row",
-    alignItems: "center",
-    alignSelf: "center",
-    gap: Spacing.one,
-    borderRadius: 20,
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.one + 2,
-    marginBottom: Spacing.three,
-  },
-  salaryText: { fontSize: 14, fontWeight: "600" },
-  tagsRow: {
+  infoCard: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: Spacing.two,
     justifyContent: "center",
+    columnGap: Spacing.four,
+    rowGap: Spacing.two,
     marginBottom: Spacing.four,
   },
-  tagChip: {
-    borderRadius: 12,
-    paddingHorizontal: Spacing.two + 2,
-    paddingVertical: Spacing.one,
+  infoItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.one,
   },
-  tagText: { fontSize: 12 },
+  infoText: {
+    fontSize: 13,
+    fontWeight: "500",
+  },
   footer: {
     flexDirection: "row",
     alignItems: "center",
