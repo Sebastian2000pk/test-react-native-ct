@@ -8,6 +8,7 @@ interface FavoritesState {
   toggle: (job: Job) => void;
   isFavorite: (id: number) => boolean;
   remove: (id: number) => void;
+  clear: () => void;
 }
 
 export const useFavoritesStore = create<FavoritesState>()(
@@ -25,6 +26,7 @@ export const useFavoritesStore = create<FavoritesState>()(
       isFavorite: (id) => get().favorites.some((j) => j.id === id),
       remove: (id) =>
         set({ favorites: get().favorites.filter((j) => j.id !== id) }),
+      clear: () => set({ favorites: [] }),
     }),
     {
       name: "favorites-storage",

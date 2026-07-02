@@ -1,6 +1,8 @@
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
+import { ClearFavoritesButton } from "../components/ClearFavoritesButton";
 import { JobCard } from "../components/JobCard";
 import { StateView } from "../components/StateView";
+import { Spacing } from "../constants/theme";
 import { useTheme } from "../hooks/use-theme";
 import { useFavoritesStore } from "../stores/useFavoritesStore";
 
@@ -22,6 +24,12 @@ export const FavoritesScreen = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <View style={styles.toolbar}>
+        <Text style={[styles.count, { color: colors.textSecondary }]}>
+          {favorites.length} guardado{favorites.length === 1 ? "" : "s"}
+        </Text>
+        <ClearFavoritesButton />
+      </View>
       <FlatList
         style={styles.list}
         data={favorites}
@@ -43,6 +51,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 16,
     paddingBottom: 8,
+  },
+  toolbar: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: Spacing.three,
+    paddingVertical: Spacing.three,
+  },
+  count: {
+    fontSize: 13,
+    fontWeight: "500",
   },
   list: {
     flex: 1,
