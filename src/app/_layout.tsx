@@ -5,6 +5,7 @@ import {
   SafeAreaView,
 } from "react-native-safe-area-context";
 
+import { BackButton } from "@/components/header/BackButton";
 import { FavoritesButton } from "@/components/header/FavoritesButton";
 import { ProfileIcon } from "@/components/header/ProfileIcon";
 import { useTheme } from "@/hooks/use-theme";
@@ -34,9 +35,10 @@ export default function RootLayout() {
             name="favorites"
             options={{
               headerShown: true,
-              headerBackTitle: "Atrás",
+              headerTitleAlign: "center",
               headerShadowVisible: false,
               headerStyle: { backgroundColor: colors.background },
+              headerLeft: () => <BackButton />,
               title: "Favoritos",
             }}
           />
@@ -44,9 +46,10 @@ export default function RootLayout() {
             name="job/[id]"
             options={{
               headerShown: true,
-              headerBackTitle: "Atrás",
+              headerTitleAlign: "center",
               headerShadowVisible: false,
               headerStyle: { backgroundColor: colors.background },
+              headerLeft: () => <BackButton />,
               title: "",
             }}
           />

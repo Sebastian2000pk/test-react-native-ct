@@ -8,6 +8,18 @@ export const FavoritesScreen = () => {
   const { favorites } = useFavoritesStore();
   const colors = useTheme();
 
+  if (favorites.length === 0) {
+    return (
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
+        <StateView
+          status="empty"
+          empty="No tienes empleos guardados"
+          icon="heart-outline"
+        />
+      </View>
+    );
+  }
+
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <FlatList
@@ -15,9 +27,6 @@ export const FavoritesScreen = () => {
         data={favorites}
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => <JobCard job={item} />}
-        ListEmptyComponent={
-          <StateView status="empty" empty="No tienes empleos guardados" />
-        }
       />
     </View>
   );
